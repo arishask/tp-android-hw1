@@ -2,7 +2,7 @@ package com.example.android_hw1
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.compose.runtime.internal.isLiveLiteralsEnabled
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 class MyAdapter(): RecyclerView.Adapter<MyViewHolder>() {
@@ -23,15 +23,21 @@ class MyAdapter(): RecyclerView.Adapter<MyViewHolder>() {
         holder.bind(items[position])
     }
 
-    fun setItems(list: List<Int>){
+    fun setItems(newList: List<Int>) {
+        val diffCallback = MainDiffUtilCallback(items, newList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         items.clear()
-        items.addAll(list)
-        notifyDataSetChanged()
+        items.addAll(newList)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     fun addItems(item: Int){
         items.add(item)
         notifyDataSetChanged()
+    }
+
+    fun getItems(): ArrayList<Int>{
+        return items
     }
 
 }
